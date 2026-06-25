@@ -1,0 +1,4 @@
+LICHESS_API_TOKEN=your_api_token_here
+EMAIL_SENDER=your_email@example.com
+EMAIL_APP_PASSWORD=your_google_app_password
+TARGET_EMAIL=target@example.com
