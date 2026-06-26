@@ -61,7 +61,8 @@ for name in user_names:
         break
 
 else:
-    stats_path = "Projekten/Lichess/stats.json"
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    stats_path = os.path.join(base_dir, "stats.json")
 
     if os.path.exists(stats_path):
         try:
