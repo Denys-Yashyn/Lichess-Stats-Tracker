@@ -58,16 +58,14 @@ EMAIL_APP_PASSWORD=your_secure_app_password
 TARGET_EMAIL=receiver_email@example.com
 ```
 ### 4. Customize Tracking Parameters
-Before running the script, open `main.py` in your text editor and update the target users and game modes to fit your needs. 
+The application uses an external configuration file for easy setup without altering the Python code.
+Open the `config.json` file in the root directory and update it with your desired target Lichess usernames and game modes:
 
-Locate the following variables at the top of the file:
-```python
-# Change these to the Lichess usernames you want to track
-user_names = ["Your_Username_Here", "Another_Player"]
-
-# Customize the game modes (e.g., "bullet", "classic", "correspondence" More info about available modes is here: https://lichess.org/api#description/clients)
-# inside the dictionary comprehension:
-for mode in ["rapid", "puzzle", "blitz"]
+```json
+{
+    "user_names" : ["Target_User_1", "Target_User_2"],
+    "modes" : ["rapid", "puzzle", "mode 3", "mode 4" etc.]
+}
 ```
 
 ### 5. Running the Script
@@ -83,4 +81,6 @@ python main.py
 `.gitignore` — Configured to prevent local caching files (`__pycache__`), virtual environments (`venv`), and the confidential `.env` file from being exposed publicly.
 
 `LICENSE` — Licensed under the permissive MIT License.
+
+`config.json` — A configuration file to easily manage target users and tracking modes without modifying the core script.
 
