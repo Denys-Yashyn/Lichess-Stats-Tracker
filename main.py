@@ -9,7 +9,14 @@ email_password = os.getenv("EMAIL_APP_PASSWORD")
 target_email = os.getenv("TARGET_EMAIL")
 base_url = "https://lichess.org"
 user_rating_dict = {}
-user_names = ["Yashin_Denis", "Pro_100_Sasha"]
+base_dir = os.path.dirname(os.path.abspath(__file__)) 
+config_path = os.path.join(base_dir, "config.json")
+
+# read config.json file
+with open(config_path, "r", encoding="utf-8") as f:
+    config = json.load(f)
+
+user_names = config["user_names"]
 
 
 def get_user_info(user_name):
@@ -43,7 +50,7 @@ for name in user_names:
             mode.title(): {
                 stat: user_info["perfs"][mode][stat] for stat in ["rating", "games"]
             }
-            for mode in ["rapid", "puzzle", "blitz"]
+            for mode in config["modes"]
         }
         user_rating_dict[name] = modes
 
@@ -61,11 +68,12 @@ for name in user_names:
         break
 
 else:
-    base_dir = os.path.dirname(os.path.abspath(__file__))
+
     stats_path = os.path.join(base_dir, "stats.json")
 
     if os.path.exists(stats_path):
         try:
+            # read stats.json file if file exists
             with open(stats_path, "r", encoding="utf-8") as stats:
                 old_data = json.load(stats)
         except json.JSONDecodeError:
@@ -77,18 +85,23 @@ else:
     new_data.update(user_rating_dict)
 
     if new_data != old_data:
-        # print("Before:", old_data, "\n")
-        # print("After:", new_data)
+    
+        # update changes in stats.json file
+        with open(stats_path, "w", encoding="utf-8") as stats:
+            json.dump(new_data, stats, ensure_ascii=False, indent=4)
+
         print("Changes:")
 
+        # print changes for every user
         for user_change in new_data:
 
             if user_change not in old_data:
                 print("New user:", user_change)
 
+            # if user have changes, we are going to next point
             elif (
                 new_data[user_change] != old_data[user_change]
-            ):  # if user have changes, we are going to next point
+            ):                  
                 print(user_change, ":\n\nOld: \t\t\t\t\t >\t New:")
 
                 for mod_change in new_data[user_change]:
@@ -121,5 +134,4 @@ else:
     else:
         print("Users don't have changes")
 
-    with open(stats_path, "w", encoding="utf-8") as stats:
-        json.dump(new_data, stats, ensure_ascii=False, indent=4)
+
