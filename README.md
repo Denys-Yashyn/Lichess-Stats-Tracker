@@ -67,7 +67,7 @@ Open the `config.json` file in the root directory and update it with your desire
 
 ```json
 {
-    "user_names" : ["Target_User_1", "Target_User_2"],
+    "usernames" : ["Target_User_1", "Target_User_2"],
     "modes" : ["rapid", "puzzle", "mode 3", "mode 4" etc.]
 }
 ```
