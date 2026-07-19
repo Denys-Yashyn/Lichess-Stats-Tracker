@@ -48,7 +48,7 @@ To run this application, you need to configure your secrets locally.
 
 Create a file named .env in the root directory.
 
-Open the template file (e.g., env_example.txt or env.example) uploaded in the repository.
+Open the template file env.example uploaded in the repository.
 
 Copy its structure into your new .env file and populate it with your actual credentials:
 ```Plaintext
