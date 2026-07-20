@@ -1,6 +1,5 @@
 import os, requests, smtplib, json, datetime
 from dotenv import load_dotenv
-import smtplib
 
 load_dotenv()
 
