@@ -1,5 +1,6 @@
 import os, requests, smtplib, json, datetime
 from dotenv import load_dotenv
+import smtplib
 
 load_dotenv()
 
@@ -30,6 +31,7 @@ class LichessAPIClient:
             )
 
 
+
 class StatsAnalyzer:
     def __init__(self, api_client):
         self.base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -37,7 +39,7 @@ class StatsAnalyzer:
         self.api_client = api_client
         self.DEFAULT_CONFIG = {
             "usernames": ["Yashin_Denis", "Pro_100_Sasha"],
-            "modes": ["rapid", "puzzle", "blitz"],
+            "modes": ["rapid", "puzzle", "blitz", "bullet"],
         }
 
         # create default config.json file
@@ -78,7 +80,7 @@ class StatsAnalyzer:
                     for mode in self.config["modes"]
                 }
 
-                self.message += f"\n\t{player}:\n"
+                self.message += f"\n{player}:\n"
                 self.rank_dict["Users"][player] = self.modes
 
                 for mode, stats in self.modes.items():
@@ -90,7 +92,7 @@ class StatsAnalyzer:
                 self.message += "\n"
 
             else:
-                break
+                return None
 
         if (
             self.message
@@ -128,7 +130,7 @@ class StatsAnalyzer:
         with open(self.stats_path, "w", encoding="utf-8") as stats:
             json.dump(self.new_data, stats, ensure_ascii=False, indent=4)
 
-        self.message += f"\n\t\tLast Update: {self.old_data["Date"]}\n\tUPDATES:\n\n"
+        self.message += f"\nUPDATES SINCE: {self.old_data["Date"]}\n\n"
         self.users = self.new_data["Users"]
               
 
@@ -204,12 +206,37 @@ class StatsAnalyzer:
                 
                 self.message += "\n"
 
-        return self.message
+        return self.message.rstrip()
 
 class EmailNotifer:
-    pass
+    def __init__(self, stats):
+        self.stats = stats
+        self.HOST = "smtp.gmail.com"
+        self.PORT = 587
+        self.FROM_EMAIL = os.getenv("EMAIL_SENDER")
+        self.TO_EMAIL = os.getenv("TARGET_EMAIL")
+        self.PASSWORD = os.getenv("EMAIL_APP_PASSWORD")
+        
+    def create_message(self):
+        self.message = "Subject: Lichess stats report"
+        self.message += self.stats.create_stats_file()
+        return self.message
+    
+    def send_email(self, MESSAGE):
+        smtp = smtplib.SMTP(self.HOST, self.PORT)
+        
+        status_code, response = smtp.ehlo()
+        print(f"[*] Echoing the server: {status_code}{response}")
 
-analyzer = StatsAnalyzer(LichessAPIClient())
-analyze = analyzer.create_stats_file()
+        status_code, response = smtp.starttls()
+        print(f"[*] Starting TLS connection: {status_code} {response}")
 
-print(analyze)
+        status_code, response = smtp.login(self.FROM_EMAIL, self.PASSWORD)
+        print(f"[*] Logging in: {status_code} {response}")
+
+        smtp.sendmail(self.FROM_EMAIL, self.TO_EMAIL, MESSAGE)
+        smtp.quit()
+
+send_message = EmailNotifer(StatsAnalyzer(LichessAPIClient()))
+
+send_message.send_email(send_message.create_message())
