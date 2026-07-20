@@ -2,7 +2,7 @@
 
 A Python-based automation tool designed to fetch, analyze, and track player statistics and rating changes using the official Lichess API. The application monitors specified player profiles, detects changes in game counts or ratings, and logs data locally.
 
-**Current Project Status:** Active Development. The core API integration and data comparison logic are fully functional. The next phases include adding timestamps, automated email reports, automated email reports, and cloud deployment).
+**Current Project Status:** Active Development. The core API integration and data comparison logic are fully functional. The next phases include adding timestamps, automated email reports, and cloud deployment).
 
 ---
 
