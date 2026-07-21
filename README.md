@@ -17,7 +17,7 @@ A Python-based automation tool designed to fetch, analyze, and track player stat
 ### Planned / Roadmap
 - [X] **Timestamping:** Integrate the `datetime` module to log the exact time of each performance snapshot.
 - [X] **Email Alerts:** Implement automated notifications via `smtplib` to send progress reports directly to a target email address when changes occur.
-- [ ] **Cloud Deployment:** Deploying a script as a Serverless function (AWS Lambda / Google Cloud Functions).
+- [ ] **Cloud Deployment:** Deploying a script as a Serverless function (AWS Lambda).
 
 ---
 
